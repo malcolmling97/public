@@ -16,24 +16,16 @@ def generate_page(from_path, template_path, dest_path):
 
     with open(from_path, "r") as file:
         markdown_content = file.read()
-    # print(markdown_content)
 
     with open(template_path, "r") as file:
         template_content = file.read()
-    # print(html_content)
 
     node = markdown_to_html_node(markdown_content)
     node_html_content = node.to_html()
 
-    # print(node_html_content)
-    # print("extractign title")
     title = extract_title(markdown_content)
-    # print(title)
-
     template_content = template_content.replace("{{ Title }}", title)
     template_content = template_content.replace("{{ Content }}", node_html_content)
-
-    # print(template_content)
 
     directory = os.path.dirname(dest_path)
 
@@ -43,18 +35,26 @@ def generate_page(from_path, template_path, dest_path):
 
     
 
+def generate_pages_recursive(from_path, template_path, to_path):
+     
+     for entry in os.listdir(from_path):
+        source_path = os.path.join(from_path, entry)
+        dest_path = os.path.join(to_path, entry)
+
+        # If it's a file, process it
+        if os.path.isfile(source_path):
+            if source_path.endswith(".md"):  # Work only with markdown files
+                dest_file_path = dest_path.replace(".md", ".html")
+                generate_page(source_path, template_path, dest_file_path)
+                print(f"File handled: {source_path} -> {dest_file_path}")
+
+        # If it's a directory, create it in the destination and call recursively
+        elif os.path.isdir(source_path):
+            os.makedirs(dest_path, exist_ok=True)  # Ensure the directory exists in destination
+            print(f"Processing directory: {source_path}")
+            generate_pages_recursive(source_path, template_path, dest_path)
+
 
     
-
-
-
-
-
-
-
-# test_generate_page = generate_page("./content/index.md", "./template.html","./public/index.html")
-
-
-
 
 

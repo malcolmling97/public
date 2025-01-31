@@ -3,13 +3,12 @@ import shutil
 
 from copystatic import copy_directory_recursive
 from generatepage import generate_page
+from generatepage import generate_pages_recursive
 
 dir_path_static = "./static"
 dir_path_public = "./public"
-
-dir_path_index_md = "./content/index.md"
-dir_path_template_html = "./template.html"
-dir_path_index_html = "./public/index.html"
+dir_path_content = "./content"
+template_path = "./template.html"
 
 def main():
 
@@ -21,8 +20,8 @@ def main():
     os.mkdir(dir_path_public)
     copy_directory_recursive(dir_path_static, dir_path_public)
     print("completed copy recursion")
-
-    generate_page("./content/index.md", "./template.html","./public/index.html")
+    
+    generate_pages_recursive(dir_path_content, template_path, dir_path_public)
 
 
 
